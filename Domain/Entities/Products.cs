@@ -8,9 +8,8 @@ public class Products : BaseEntity
     public string? ProductDescription { get; private set; }
     public decimal Price { get; private set; }
     public int Stock { get; private set; }
-    public decimal Quantity { get; private set; }
     public string Category { get; private set; }
-    public int MinQuntity { get; private set; }
+    public int MinQuantity { get; private set; }
     
     
     private Products(string name, string? description, decimal price, int stock, string category , int minQuntity)
@@ -21,7 +20,7 @@ public class Products : BaseEntity
         Price = price;
         Stock = stock;
         Category = category;
-        MinQuntity = minQuntity;
+        MinQuantity = minQuntity;
     }
     /// <summary>
     /// Factory method to create a new product.

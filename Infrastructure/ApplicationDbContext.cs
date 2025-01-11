@@ -1,22 +1,22 @@
 ﻿using Domain.Entities;
 using Infrastructure.Interceptors;
-using Infrastructure.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationDbContext : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
+        
     }
 
+
     public DbSet<Orders> Orders { get; set; }
-    public DbSet<Payments> Payments { get; set; }
     public DbSet<OrderItems> OrderItems { get; set; }
     public DbSet<Products> Products { get; set; }
+    public DbSet<Users> Users { get; set; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder
@@ -26,7 +26,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder);
 
-        
+        modelBuilder.Entity<Users>()
+            .ToTable("Users")
+            .HasMany(u => u.Orders)
+            .WithOne(o => o.Customers)
+            .HasForeignKey(o => o.CustomerId);
         
         modelBuilder.Entity<OrderItems>()
             .HasOne(oi => oi.Product)
@@ -42,25 +46,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .OnDelete(DeleteBehavior.Restrict); // Optional: specify delete behavior
         ;
 
-        modelBuilder.Entity<Payments>(entity =>
-        {
-            entity.HasOne(p => p.Order)
-                .WithMany()
-                .HasForeignKey(p => p.OrderId);
-            
-            entity.Property(o => o.Status)
-                .HasConversion<int>();
-        });
-            
+ 
 
         modelBuilder.Entity<Orders>(entity =>
         {
             entity.Property(o => o.Status)
                 .HasConversion<int>();
             
-            entity.HasOne<ApplicationUser>()
+            entity.HasOne(o => o.Customers)
                 .WithMany(u => u.Orders)
-                .HasForeignKey(o => o.CustomerId);    
+                .HasForeignKey(o => o.CustomerId)
+                .IsRequired();   
             
         });
         

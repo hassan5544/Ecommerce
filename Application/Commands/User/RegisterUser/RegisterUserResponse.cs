@@ -1,6 +1,4 @@
-﻿using Application.Dtos.User;
-
-namespace Application.Commands.RegisterUser;
+﻿namespace Application.Commands.User.RegisterUser;
 
 public class RegisterUserResponse
 {

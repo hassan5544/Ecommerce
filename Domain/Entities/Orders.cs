@@ -7,7 +7,8 @@ public class Orders : BaseEntity
 {
     public string OrderNumber { get; init; }
     public DateTime OrderDate { get; init; }
-    public string CustomerId { get; init; }
+    public Guid CustomerId { get; init; }
+    public Users Customers { get; set; }
     public List<OrderItems> Items { get; private set; } = new List<OrderItems>();
     public decimal TotalAmount { get; private set; }
 
@@ -21,7 +22,7 @@ public class Orders : BaseEntity
     /// </summary>
     /// <param name="customerId"></param>
     /// <param name="items"></param>
-    private Orders(string customerId, IEnumerable<OrderItems> items)
+    private Orders(Guid customerId, IEnumerable<OrderItems> items)
     {
         Id = Guid.NewGuid();
         OrderNumber = Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
@@ -36,7 +37,7 @@ public class Orders : BaseEntity
         // Required by EF
     }
 
-    public static Orders Create(string customerId, IEnumerable<OrderItems> items )
+    public static Orders Create(Guid customerId, IEnumerable<OrderItems> items )
     {
         return new Orders(customerId, items );
     }

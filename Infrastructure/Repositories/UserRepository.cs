@@ -1,40 +1,32 @@
 ﻿using Application.Dtos.User;
-using Application.Interfaces;
-using Infrastructure.Models;
+using Domain.Entities;
+using Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
-
 public class UserRepository : IUserRepository
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ApplicationDbContext _context;
 
-    public UserRepository(UserManager<ApplicationUser> userManager)
+    public UserRepository(ApplicationDbContext context)
     {
-        _userManager = userManager;
+        _context = context;
     }
 
-    public async Task<UserDto?> GetUserByEmailAsync(string email)
+    public async Task<Users> GetByEmailAsync(string email)
     {
-        return await _userManager.FindByEmailAsync(email);
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task<UserDto?> GetUserByIdAsync(Guid id)
+    public async Task AddUserAsync(Users user)
     {
-        return await _userManager.FindByIdAsync(id.ToString());
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<bool> EmailExistsAsync(string email)
     {
-        return await _userManager.FindByEmailAsync(email) != null;
-    }
-
-    public async Task AddUserAsync(ApplicationUser user, string password)
-    {
-        var result = await _userManager.CreateAsync(user, password);
-        if (!result.Succeeded)
-        {
-            throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
-        }
+        return await _context.Users.AnyAsync(u => u.Email == email);
     }
 }

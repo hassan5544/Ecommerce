@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using System.Text;
 using Application.Dtos.User;
-using Application.JWTGenrator;
-using Infrastructure.Models;
+using Domain.Entities;
+using Domain.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -18,11 +18,11 @@ public class JwtTokenGenerator: IJwtTokenGenerator
         _configuration = configuration;
     }
 
-    public string GenerateToken(UserDto user)
+    public string GenerateToken(Users user)
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(ClaimTypes.Name, user.FullName),
             new Claim(ClaimTypes.Role, user.Role)

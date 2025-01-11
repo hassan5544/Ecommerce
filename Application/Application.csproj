@@ -7,11 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Queries\" />
+      <Folder Include="Commands\order\" />
+      <Folder Include="Commands\User\" />
+      <Folder Include="Interfaces\" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="MediatR" Version="12.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
 </Project>
