@@ -39,6 +39,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand 
         
         CreateProductResponse response = new CreateProductResponse
         {
+            Id = newProduct.Id,
             ProductName = newProduct.ProductName,
             ProductDescription = newProduct.ProductDescription,
             Price = newProduct.Price,

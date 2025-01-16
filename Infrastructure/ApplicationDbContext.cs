@@ -1,7 +1,8 @@
 ﻿using Domain.Entities;
-using Infrastructure.Interceptors;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Helpers.Implementations;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Infrastructure;
 
@@ -17,15 +18,36 @@ public class ApplicationDbContext : DbContext
     public DbSet<OrderItems> OrderItems { get; set; }
     public DbSet<Products> Products { get; set; }
     public DbSet<Users> Users { get; set; }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder
-            .AddInterceptors(new SoftDeleteInterceptor());
+    {
+        optionsBuilder.ConfigureWarnings(warnings => 
+            warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
+    }
+      
+    
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+        var passwordHasher = new PasswordHasher();
 
+        // Seed an admin user
+        var adminUser = Domain.Entities.Users.CreateCustomer(
+            fullName: "Admin User",
+            email: "admin@gmail.com",
+            password: "12345",
+            passwordHasher: passwordHasher
+        );
+
+        // Change the role to Admin
+        adminUser.GetType().GetProperty(nameof(adminUser.Role))?.SetValue(adminUser, "Admin");
+
+        // Ensure the ID is consistent across migrations
+        adminUser.GetType().GetProperty(nameof(adminUser.Id))?.SetValue(adminUser, Guid.NewGuid());
+
+        modelBuilder.Entity<Users>().HasData(adminUser);
         modelBuilder.Entity<Users>()
             .ToTable("Users")
             .HasMany(u => u.Orders)
@@ -37,16 +59,13 @@ public class ApplicationDbContext : DbContext
             .WithMany()
             .HasForeignKey(oi => oi.ProductId)
             .OnDelete(DeleteBehavior.Restrict); 
-            ;
+            
 
         modelBuilder.Entity<OrderItems>()
             .HasOne<Orders>()
             .WithMany(o => o.Items)
             .HasForeignKey(oi => oi.OrderId)
-            .OnDelete(DeleteBehavior.Restrict); // Optional: specify delete behavior
-        ;
-
- 
+            .OnDelete(DeleteBehavior.Restrict); 
 
         modelBuilder.Entity<Orders>(entity =>
         {
@@ -59,9 +78,5 @@ public class ApplicationDbContext : DbContext
                 .IsRequired();   
             
         });
-        
-        
-            
     }
-
 }

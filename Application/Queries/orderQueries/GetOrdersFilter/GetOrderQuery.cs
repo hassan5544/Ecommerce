@@ -1,6 +1,10 @@
-﻿namespace Application.Queries.orderQueries.GetOrdersFilter;
+﻿using Application.Dtos.Order;
+using Domain.Entities;
+using MediatR;
 
-public class GetOrderQuery
+namespace Application.Queries.orderQueries.GetOrdersFilter;
+
+public class GetOrderQuery : IRequest<IEnumerable<OrderDto>>
 {
     public Guid? CustomerId { get; set; }
     public string? Status { get; set; }

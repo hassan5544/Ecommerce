@@ -1,4 +1,4 @@
-﻿namespace Application.Dtos;
+﻿namespace Application.Dtos.Order;
 
 public record OrderItemDto
 {
@@ -6,5 +6,5 @@ public record OrderItemDto
     public string ProductName { get; init; }
     public int Quantity { get; init; }
     public decimal Price { get; init; }
-    public decimal Subtotal { get; init; }
+    public decimal TotalAmount { get; init; }
 }

@@ -1,4 +1,5 @@
 ﻿using Domain.Repositories;
+using Helpers.Interfaces;
 using MediatR;
 
 namespace Application.Commands.User.LoginUser;
@@ -32,7 +33,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
             throw new UnauthorizedAccessException("Invalid email or password.");
 
         // Generate JWT token
-        var token = _jwtTokenGenerator.GenerateToken(user);
+        var token = _jwtTokenGenerator.GenerateToken(user.Id , user.Email , user.FullName , user.Role);
 
         // Return user info and token
         return new LoginUserResponse

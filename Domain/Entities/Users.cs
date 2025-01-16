@@ -1,5 +1,6 @@
 ﻿using Domain.Repositories;
 using Domain.Shared;
+using Helpers.Interfaces;
 
 namespace Domain.Entities;
 

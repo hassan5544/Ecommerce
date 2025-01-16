@@ -6,6 +6,7 @@ namespace Domain.Repositories;
 public interface IProductsRepository
 {
     Task<Products> GetProductByIdAsync(Guid productId);
+    Task<List<Products>> GetProductByIdsAsync(IEnumerable<Guid> productsId);
     Task<List<Products>> GetProductsBytermAsync(string term);
     Task<IEnumerable<Products>> GetProductsFilter(ProductFilter filter, int page, int pageSize, string sort);
     Task<bool> CheckProductExists(string productName);

@@ -1,6 +1,9 @@
-﻿namespace Application.Queries.productQueries.GetProductFilter;
+﻿using Application.Dtos.Product;
+using MediatR;
 
-public class GetProductsQuery
+namespace Application.Queries.productQueries.GetProductFilter;
+
+public class GetProductsQuery : IRequest<IEnumerable<ProductDto>>
 {
     public string Category { get; set; }
     public bool IsAvailable { get; set; }

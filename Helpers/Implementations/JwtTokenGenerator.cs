@@ -1,13 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Application.Dtos.User;
-using Domain.Entities;
-using Domain.Repositories;
+using Helpers.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Infrastructure.Repositories;
+namespace Helpers.Implementations;
 
 public class JwtTokenGenerator: IJwtTokenGenerator
 {
@@ -18,14 +16,14 @@ public class JwtTokenGenerator: IJwtTokenGenerator
         _configuration = configuration;
     }
 
-    public string GenerateToken(Users user)
+    public string GenerateToken(Guid id , string email , string fullName , string role )
     {
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.FullName),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim(JwtRegisteredClaimNames.Sub, id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, email),
+            new Claim(ClaimTypes.Name, fullName),
+            new Claim(ClaimTypes.Role, role)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

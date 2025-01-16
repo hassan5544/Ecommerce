@@ -1,6 +1,7 @@
 ﻿using Application.Commands.User.RegisterUser;
 using Domain.Entities;
 using Domain.Repositories;
+using Helpers.Interfaces;
 using MediatR;
 
 namespace Application.Commands.User.RegisterUser;
@@ -27,7 +28,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, R
         
         await _userRepository.AddUserAsync(user);
         
-        string token = _jwtTokenGenerator.GenerateToken(user);
+        string token = _jwtTokenGenerator.GenerateToken(user.Id , user.Email,user.FullName , user.Role);
         RegisterUserResponse response = new RegisterUserResponse
         {
             FullName = user.FullName,

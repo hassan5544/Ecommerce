@@ -25,6 +25,11 @@ public class ProductsRepository : IProductsRepository
         return result;
     }
 
+    public async Task<List<Products>> GetProductByIdsAsync(IEnumerable<Guid> productsId)
+    {
+        return await _context.Products.Where(p => productsId.Contains(p.Id)).ToListAsync();
+    }
+
     public async Task<IEnumerable<Products>> GetProductsFilter(ProductFilter filter , int page, int pageSize , string sort)
     {
         if (page <= 0) page = 1;

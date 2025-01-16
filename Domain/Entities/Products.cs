@@ -2,7 +2,7 @@
 
 namespace Domain.Entities;
 
-public class Products : BaseEntity
+public class Products : BaseEntity 
 {
     public string ProductName { get; private set; }
     public string? ProductDescription { get; private set; }
@@ -10,7 +10,6 @@ public class Products : BaseEntity
     public int Stock { get; private set; }
     public string Category { get; private set; }
     public int MinQuantity { get; private set; }
-    
     
     private Products(string name, string? description, decimal price, int stock, string category , int minQuntity)
     {
@@ -56,4 +55,15 @@ public class Products : BaseEntity
         Stock += quantity;
     }
     
+    public void Update(string name, string? description, decimal price, int stock, string category, int minQuantity)
+    {
+        ProductName = name;
+        ProductDescription = description;
+        Price = price;
+        Stock = stock;
+        Category = category;
+        MinQuantity = minQuantity;
+    }
+
+
 }

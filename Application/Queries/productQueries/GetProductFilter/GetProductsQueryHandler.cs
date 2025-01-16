@@ -1,19 +1,23 @@
-﻿using Domain.Entities;
+﻿using Application.Dtos.Product;
+using AutoMapper;
+using Domain.Entities;
 using Domain.filters;
 using Domain.Repositories;
+using MediatR;
 
 namespace Application.Queries.productQueries.GetProductFilter;
 
-public class GetProductsQueryHandler
+public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, IEnumerable<ProductDto>>
 {
     private readonly IProductsRepository _productsRepository;
-
-    public GetProductsQueryHandler(IProductsRepository productsRepository)
+    private readonly IMapper _mapper;
+    public GetProductsQueryHandler(IProductsRepository productsRepository, IMapper mapper)
     {
         _productsRepository = productsRepository;
+        _mapper = mapper;
     }
     
-    public async Task<IEnumerable<Products>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ProductDto>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
     {
         ProductFilter filter = new ProductFilter
         {
@@ -22,6 +26,8 @@ public class GetProductsQueryHandler
             priceTo = request.PriceTo,
             isAvailable = request.IsAvailable
         };
-        return await _productsRepository.GetProductsFilter(filter, request.Page, request.PageSize, request.Sort);
+        var result = await _productsRepository.GetProductsFilter(filter, request.Page, request.PageSize, request.Sort);
+        
+        return _mapper.Map<IEnumerable<ProductDto>>(result);
     }
 }

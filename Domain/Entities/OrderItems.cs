@@ -10,7 +10,7 @@ public class OrderItems : BaseEntity
     public int Quantity { get; private set; }
     public decimal Price { get; private set; }
     public Products Product { get; private set; }
-    public decimal TotalAmount => Quantity * Product.Price;
+    public decimal TotalAmount => Quantity * Price;
     
 
     private OrderItems(int quantity, Products item)

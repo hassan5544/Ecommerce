@@ -3,7 +3,7 @@ using Domain.Shared;
 
 namespace Domain.Entities;
 
-public class Orders : BaseEntity
+public class Orders : BaseEntity 
 {
     public string OrderNumber { get; init; }
     public DateTime OrderDate { get; init; }
@@ -16,6 +16,7 @@ public class Orders : BaseEntity
     public OrderStatus Status { get; private set; }
     public DateTime? ShippedDate { get; private set; }
     public DateTime? DeliveredDate { get; private set; }
+    
     
     /// <summary>
     /// Factory method to create a new order.
@@ -69,5 +70,6 @@ public class Orders : BaseEntity
         DeliveredDate = DateTime.UtcNow;
     }
 
-  
+
+
 }

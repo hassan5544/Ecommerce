@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\order\" />
       <Folder Include="Commands\User\" />
       <Folder Include="Interfaces\" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
       <PackageReference Include="MediatR" Version="12.4.1" />
     </ItemGroup>
 
