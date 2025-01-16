@@ -6,10 +6,12 @@ namespace Application.Commands.product.DeleteProduct;
 public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand>
 {
     private readonly IProductsRepository _productsRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteProductCommandHandler(IProductsRepository productsRepository)
+    public DeleteProductCommandHandler(IProductsRepository productsRepository, IUnitOfWork unitOfWork)
     {
         _productsRepository = productsRepository;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
@@ -19,5 +21,6 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand>
             throw new Exception("Product not found");
 
         await _productsRepository.DeleteProductAsync(request.Id);
+        await _unitOfWork.CommitAsync(cancellationToken);
     }
 }

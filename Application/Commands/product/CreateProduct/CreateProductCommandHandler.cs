@@ -7,10 +7,12 @@ namespace Application.Commands.product.CreateProduct;
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand , CreateProductResponse>
 {
     private readonly IProductsRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateProductCommandHandler(IProductsRepository productRepository)
+    public CreateProductCommandHandler(IProductsRepository productRepository, IUnitOfWork unitOfWork)
     {
         _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<CreateProductResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -36,7 +38,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand 
         
         var newProduct = Products.Create(request.ProductName , request.ProductDescription , request.Price , request.Stock , request.Category , request.MinQuantity);
         await _productRepository.AddProductAsync(newProduct);
-        
+        await _unitOfWork.CommitAsync(cancellationToken);
         CreateProductResponse response = new CreateProductResponse
         {
             Id = newProduct.Id,

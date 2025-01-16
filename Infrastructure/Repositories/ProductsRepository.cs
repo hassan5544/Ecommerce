@@ -85,13 +85,11 @@ public class ProductsRepository : IProductsRepository
     public async Task AddProductAsync(Products product)
     {
         await _context.Products.AddAsync(product);
-        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateProductAsync(Products product)
     {
         _context.Products.Update(product);
-        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteProductAsync(Guid productId)
@@ -100,7 +98,6 @@ public class ProductsRepository : IProductsRepository
         if (product != null)
         {
             _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
         }
     }
 }

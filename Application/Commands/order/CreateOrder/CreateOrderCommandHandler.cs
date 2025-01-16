@@ -10,13 +10,13 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
 {
     private readonly IOrdersRepository _ordersRepository;
     private readonly IProductsRepository _productsRepository;
-    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateOrderCommandHandler(IOrdersRepository ordersRepository, IMapper mapper, IProductsRepository productsRepository)
+    public CreateOrderCommandHandler(IOrdersRepository ordersRepository, IProductsRepository productsRepository, IUnitOfWork unitOfWork)
     {
         _ordersRepository = ordersRepository;
-        _mapper = mapper;
         _productsRepository = productsRepository;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -36,7 +36,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
 
 
         await _ordersRepository.AddOrderAsync(order, cancellationToken);
-
+        await _unitOfWork.CommitAsync(cancellationToken);
 
         return order.Id;
     }

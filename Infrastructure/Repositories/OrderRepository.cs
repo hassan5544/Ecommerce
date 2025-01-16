@@ -35,14 +35,12 @@ public class OrderRepository : IOrdersRepository
             item.Product.ReduceStock(item.Quantity);
             _dbContext.Products.Update(item.Product);
         }
-        await _dbContext.SaveChangesAsync(cancellationToken);
         
     }
 
     public async Task UpdateOrderStatusAsync(Orders order , CancellationToken cancellationToken)
     {
         _dbContext.Orders.Update(order);
-        await _dbContext.SaveChangesAsync(cancellationToken);
         
     }
 
@@ -52,7 +50,6 @@ public class OrderRepository : IOrdersRepository
         if (order != null)
         {
             _dbContext.Orders.Remove(order);
-            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 

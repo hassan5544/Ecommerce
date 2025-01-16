@@ -7,10 +7,12 @@ namespace Application.Commands.order.UpdateOrderStatus;
 public class UpdateOrderStatusCommandHandler : IRequestHandler<UpdateOrderStatusCommand>
 {
     private readonly IOrdersRepository _ordersRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateOrderStatusCommandHandler(IOrdersRepository ordersRepository)
+    public UpdateOrderStatusCommandHandler(IOrdersRepository ordersRepository, IUnitOfWork unitOfWork)
     {
         _ordersRepository = ordersRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task Handle(UpdateOrderStatusCommand request, CancellationToken cancellationToken)
@@ -30,5 +32,6 @@ public class UpdateOrderStatusCommandHandler : IRequestHandler<UpdateOrderStatus
         }
         
         await _ordersRepository.UpdateOrderStatusAsync(order , cancellationToken);
+        await _unitOfWork.CommitAsync(cancellationToken);
     }
 }
