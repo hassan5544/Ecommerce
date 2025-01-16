@@ -93,6 +93,7 @@ public class ProductsController : ControllerBase
     /// <param name="sort">Sort by field.</param>
     /// <returns>List of products matching the criteria.</returns>
     [HttpGet("filter")]
+    [Authorize]
     public async Task<IActionResult> GetFilteredProducts(
         [FromQuery] string category = "",
         [FromQuery] bool isAvailable = true,
