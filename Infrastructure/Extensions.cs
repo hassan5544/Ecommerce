@@ -15,6 +15,7 @@ public static class Extensions
         services.AddScoped<IProductsRepository, ProductsRepository>();
         services.AddScoped<IOrdersRepository , OrderRepository>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
 }
